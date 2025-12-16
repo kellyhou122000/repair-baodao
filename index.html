@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>寶島維修中心</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+
+    function submitContactForm(e) {
+      e.preventDefault();
+      alert('已成功送出（示範頁，尚未串接後端）');
+      e.target.reset();
+    }
+  </script>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+<header class="bg-white shadow sticky top-0">
+  <div class="max-w-6xl mx-auto p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold flex items-center gap-2">
+      <i data-lucide="wrench"></i> 寶島維修中心
+    </h1>
+  </div>
+</header>
+
+<section class="bg-sky-600 text-white py-20 text-center">
+  <h2 class="text-4xl font-bold mb-4">專業快速的維修服務</h2>
+  <p class="text-xl">手機・家電・吹風機 專業檢修</p>
+</section>
+
+<section class="max-w-4xl mx-auto py-16 px-4">
+  <h3 class="text-2xl font-bold mb-6">快速留言</h3>
+  <form onsubmit="submitContactForm(event)" class="space-y-4">
+    <input required class="w-full p-3 border rounded" placeholder="您的姓名">
+    <input required type="email" class="w-full p-3 border rounded" placeholder="Email">
+    <textarea required class="w-full p-3 border rounded" placeholder="維修需求"></textarea>
+    <button class="bg-sky-600 text-white px-6 py-3 rounded">
+      送出
+    </button>
+  </form>
+</section>
+
+<footer class="bg-gray-900 text-white text-center p-6">
+  © 2025 寶島維修中心
+</footer>
+
+</body>
+</html>
