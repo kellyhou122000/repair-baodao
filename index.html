@@ -3,57 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>寶島維修中心</title>
-
+  <title>寶島維修中心｜專業快速的數位與家電維修服務</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
     });
-
     function submitContactForm(e) {
       e.preventDefault();
       alert('已成功送出（示範頁，尚未串接後端）');
       e.target.reset();
     }
   </script>
+  <style>
+    /* 讓滾動更平滑 */
+    html { scroll-behavior: smooth; }
+  </style>
 </head>
-
 <body class="bg-gray-50 text-gray-800">
 
-<header class="bg-white shadow sticky top-0">
-  <div class="max-w-6xl mx-auto p-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold flex items-center gap-2">
-      <i data-lucide="wrench"></i> 寶島維修中心
-    </h1>
-  </div>
-</header>
+  <!-- Header -->
+  <header class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold flex items-center gap-3">
+        <i data-lucide="wrench" class="w-8 h-8 text-sky-600"></i>
+        寶島維修中心
+      </h1>
+      <nav class="hidden md:flex space-x-8 text-lg">
+        <a href="#home" class="hover:text-sky-600 transition">首頁</a>
+        <a href="#services" class="hover:text-sky-600 transition">服務項目</a>
+        <a href="#contact" class="hover:text-sky-600 transition">快速留言</a>
+      </nav>
+    </div>
+  </header>
 
-<section class="bg-sky-600 text-white py-20 text-center">
-  <h2 class="text-4xl font-bold mb-4">專業快速的維修服務</h2>
-  <p class="text-xl">手機・家電・吹風機 專業檢修</p>
-</section>
+  <!-- Hero Section -->
+  <section id="home" class="bg-gradient-to-br from-sky-500 to-sky-700 text-white py-32 text-center">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-5xl md:text-6xl font-bold mb-6">專業快速的維修服務</h2>
+      <p class="text-2xl mb-10">手機 ⋅ 筆電 ⋅ 平板 ⋅ 家電 ⋅ 吹風機 ⋅ 3C配件<br>一站式專業檢修與保養</p>
+      <a href="#contact" class="bg-white text-sky-600 font-bold px-8 py-4 rounded-full text-xl hover:bg-gray-100 transition inline-block">
+        立即預約維修
+      </a>
+    </div>
+  </section>
 
-<section class="max-w-4xl mx-auto py-16 px-4">
-  <h3 class="text-2xl font-bold mb-6">快速留言</h3>
-  <form onsubmit="submitContactForm(event)" class="space-y-4">
-    <input required class="w-full p-3 border rounded" placeholder="您的姓名">
-    <input required type="email" class="w-full p-3 border rounded" placeholder="Email">
-    <textarea required class="w-full p-3 border rounded" placeholder="維修需求"></textarea>
-    <button class="bg-sky-600 text-white px-6 py-3 rounded">
-      送出
-    </button>
-  </form>
-</section>
+  <!-- Services Section -->
+  <section id="services" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+      <h3 class="text-4xl font-bold text-center mb-12">服務項目</h3>
+      <div class="grid md:grid-cols-3 gap-10">
+        <div class="text-center p-8 bg-gray-50 rounded-xl shadow hover:shadow-lg transition">
+          <i data-lucide="smartphone" class="w-16 h-16 mx-auto mb-4 text-sky-600"></i>
+          <h4 class="text-2xl font-semibold mb-3">手機維修</h4>
+          <p class="text-gray-600">螢幕破裂、電池老化、主板故障、進水處理</p>
+        </div>
+        <div class="text-center p-8 bg-gray-50 rounded-xl shadow hover:shadow-lg transition">
+          <i data-lucide="laptop" class="w-16 h-16 mx-auto mb-4 text-sky-600"></i>
+          <h4 class="text-2xl font-semibold mb-3">筆電 / 平板</h4>
+          <p class="text-gray-600">開機不亮、鍵盤故障、系統重裝、硬碟升級</p>
+        </div>
+        <div class="text-center p-8 bg-gray-50 rounded-xl shadow hover:shadow-lg transition">
+          <i data-lucide="home" class="w-16 h-16 mx-auto mb-4 text-sky-600"></i>
+          <h4 class="text-2xl font-semibold mb-3">家電維修</h4>
+          <p class="text-gray-600">吹風機、電扇、咖啡機、小家電保養與維修</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<footer class="bg-gray-900 text-white text-center p-6">
-  © 2025 寶島維修中心
-</footer>
+  <!-- Contact Form Section -->
+  <section id="contact" class="py-20 bg-gray-100">
+    <div class="max-w-4xl mx-auto px-4">
+      <h3 class="text-4xl font-bold text-center mb-12">快速留言 ⋅ 免費報價</h3>
+      <form onsubmit="submitContactForm(event)" class="grid md:grid-cols-2 gap-6 bg-white p-10 rounded-2xl shadow-xl">
+        <input required type="text" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="您的姓名">
+        <input required type="tel" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="手機號碼">
+        <input required type="email" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Email（選填）">
+        <input type="text" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="設備品牌與型號（選填）">
+        <textarea required rows="6" class="w-full md:col-span-2 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="請描述故障現象或維修需求"></textarea>
+        <button type="submit" class="md:col-span-2 bg-sky-600 text-white font-bold px-8 py-4 rounded-lg hover:bg-sky-700 transition text-xl">
+          立即送出 ⋅ 免費估價
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-10 text-center">
+    <div class="max-w-6xl mx-auto px-4">
+      <p class="text-2xl font-bold mb-4 flex items-center justify-center gap-3">
+        <i data-lucide="wrench"></i> 寶島維修中心
+      </p>
+      <p class="mb-2">營業時間：週一至週六 10:00 - 19:00（國定假日休）</p>
+      <p class="mb-4">電話：(02) 1234-5678 │ Line ID：@baodao.repair</p>
+      <p>&copy; 2025 寶島維修中心 All Rights Reserved.</p>
+    </div>
+  </footer>
 
 </body>
 </html>
