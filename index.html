@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>寶島維修中心｜專業快速的數位與家電維修服務</title>
+    <title>專業快速的數位與家電維修服務</title>
     <!-- 載入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 載入 Lucide Icons -->
+    <!-- 載入 Lucide Icons (用於簡潔的圖標) -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <style>
+        /* 設定預設字體為 Inter 和 sans-serif */
         body {
             font-family: 'Inter', sans-serif;
-            color: #333;
+            color: #333; /* 深灰文字 */
         }
+        /* 增加圖標元件的樣式 */
         .icon-container {
             display: inline-flex;
             align-items: center;
@@ -21,61 +23,226 @@
         }
     </style>
     <script>
+        // 設定 Tailwind 配置
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'primary': '#0284c7',
-                        'primary-dark': '#0369a1',
-                        'secondary': '#fef3c7',
+                        'primary': '#0284c7', /* sky-600 */
+                        'primary-dark': '#0369a1', /* sky-700 */
+                        'secondary': '#fef3c7', /* amber-100 */
                     }
                 }
             }
         }
 
+        // 響應式導航列切換邏輯
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
         }
 
-        // 多處呼叫 createIcons 確保所有圖示顯示
-        function initIcons() {
+        // 初始化 Lucide 圖標
+        document.addEventListener('DOMContentLoaded', () => {
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
+        });
+    </script>
+
+    <!-- Firebase SDK 引入 -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, addDoc, collection, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // =====================================================================
+        // !!! IMPORTANT: FOR GITHUB DEPLOYMENT, YOU MUST PROVIDE YOUR OWN 
+        // Firebase config here. This structure ensures the app works outside 
+        // the Canvas environment.
+        // =====================================================================
+        const appId = 'repair-service-app-001'; // 填寫您專案的唯一 ID
+        const firebaseConfig = {
+            apiKey: "{YOUR_API_KEY_HERE}",
+            authDomain: "{YOUR_AUTH_DOMAIN_HERE}",
+            projectId: "{YOUR_PROJECT_ID_HERE}",
+            storageBucket: "{YOUR_STORAGE_BUCKET_HERE}",
+            messagingSenderId: "{YOUR_MESSAGING_SENDER_ID_HERE}",
+            appId: "{YOUR_APP_ID_HERE}" // 這個 app ID 與上面的 appId 不同
+        };
+        // =====================================================================
+
+        let db;
+        let auth;
+        let userId = null;
+
+        // 初始化 Firebase
+        if (firebaseConfig.projectId && firebaseConfig.apiKey) {
+            setLogLevel('Debug'); // Enable Firestore logging
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+
+            // 處理認證 (在 GitHub Pages 環境下，我們使用匿名登入)
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                    console.log('Firebase user signed in:', userId);
+                } else {
+                    console.log('No user signed in. Attempting anonymous sign-in.');
+                    try {
+                        // 在靜態網站環境中，直接使用匿名登入
+                        await signInAnonymously(auth);
+                    } catch (error) {
+                        console.error("Firebase Sign-In Failed:", error);
+                        showNotification('認證失敗，無法提交表單。', 'error');
+                    }
+                }
+            });
+        } else {
+            console.error("Firebase configuration is missing or incomplete. Contact form submission will not work.");
         }
 
-        document.addEventListener('DOMContentLoaded', initIcons);
-        window.addEventListener('load', initIcons); // 加強載入
+        /**
+         * 顯示通知訊息 (取代 alert)
+         * @param {string} message 訊息內容
+         * @param {('success'|'error')} type 訊息類型
+         */
+        function showNotification(message, type) {
+            const area = document.getElementById('notification-area');
+            const colorClass = type === 'success' ? 'bg-green-500' : 'bg-red-500';
 
-        // 簡化 Firebase（如果沒 config，就用 alert）
-        window.submitContactForm = function (event) {
-            event.preventDefault();
-            alert('已成功送出（示範模式，實際需設定 Firebase）');
-            event.target.reset();
+            const notification = document.createElement('div');
+            notification.className = `p-4 rounded-lg shadow-xl text-white max-w-xs ${colorClass} transform transition-all duration-500 ease-out translate-x-0 opacity-100`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i data-lucide="${type === 'success' ? 'check-circle' : 'x-octagon'}" class="w-5 h-5 mr-3"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            // Re-initialize lucide icons for the new element
+            if (typeof lucide !== 'undefined') {
+                 lucide.createIcons(notification); 
+            }
+
+            area.appendChild(notification);
+
+            // 自動消失
+            setTimeout(() => {
+                notification.classList.add('opacity-0', 'translate-x-full');
+                notification.addEventListener('transitionend', () => notification.remove());
+            }, 5000);
+        }
+
+        window.submitContactForm = async function (event) {
+            event.preventDefault(); // 阻止表單預設提交行為
+
+            const form = event.target;
+            const name = form.querySelector('input[type="text"]').value;
+            const email = form.querySelector('input[type="email"]').value;
+            const message = form.querySelector('textarea').value;
+            const submitButton = form.querySelector('button[type="submit"]');
+
+            if (!db || !userId) {
+                showNotification('系統準備中，請稍候再試或檢查網路連線。', 'error');
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.textContent = '提交中...';
+
+            const submissionData = {
+                name: name,
+                email: email,
+                message: message,
+                timestamp: new Date().toISOString(),
+                userId: userId // 記錄提交用戶ID
+            };
+
+            try {
+                // 將聯絡表單資料儲存到公共集合中 (路徑根據 appId 調整)
+                const collectionRef = collection(db, 'contact_submissions'); // 簡化路徑，直接在根目錄下建立 collection
+                await addDoc(collectionRef, submissionData);
+                
+                showNotification('留言成功送出！我們將儘快回覆您。', 'success');
+                form.reset(); // 清空表單
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                showNotification(`提交失敗：${e.message}`, 'error');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = '送出留言';
+            }
         };
     </script>
 </head>
 <body class="bg-gray-50">
-    <!-- 你的原有 HTML 結構保持不變，只微調卡片樣式加強視覺 -->
+
+    <!-- 導航列 -->
     <header class="sticky top-0 bg-white shadow-md z-50">
-        <!-- (導航列同原碼) -->
-        ... (這裡省略，你的導航列程式碼貼回來)
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-primary flex items-center">
+                <i data-lucide="wrench" class="w-6 h-6 mr-2"></i>
+                寶島維修中心
+            </a>
+
+            <!-- 桌機版菜單 -->
+            <div class="hidden md:flex space-x-8">
+                <a href="#home" class="text-gray-600 hover:text-primary transition duration-300 font-medium">首頁</a>
+                <a href="#services" class="text-gray-600 hover:text-primary transition duration-300 font-medium">服務項目</a>
+                <a href="#why-us" class="text-gray-600 hover:text-primary transition duration-300 font-medium">我們的優勢</a>
+                <a href="#process" class="text-gray-600 hover:text-primary transition duration-300 font-medium">維修流程</a>
+                <a href="#contact" class="text-gray-600 hover:text-primary transition duration-300 font-medium">聯絡我們</a>
+            </div>
+
+            <!-- 手機版菜單按鈕 -->
+            <button id="menu-button" onclick="toggleMenu()" class="md:hidden p-2 text-gray-700 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary rounded-lg">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </nav>
+
+        <!-- 手機版下拉菜單 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-inner pb-4">
+            <a href="#home" onclick="toggleMenu()" class="block px-4 py-2 text-gray-700 hover:bg-primary hover:text-white transition duration-300">首頁</a>
+            <a href="#services" onclick="toggleMenu()" class="block px-4 py-2 text-gray-700 hover:bg-primary hover:text-white transition duration-300">服務項目</a>
+            <a href="#why-us" onclick="toggleMenu()" class="block px-4 py-2 text-gray-700 hover:bg-primary hover:text-white transition duration-300">我們的優勢</a>
+            <a href="#process" onclick="toggleMenu()" class="block px-4 py-2 text-gray-700 hover:bg-primary hover:text-white transition duration-300">維修流程</a>
+            <a href="#contact" onclick="toggleMenu()" class="block px-4 py-2 text-gray-700 hover:bg-primary hover:text-white transition duration-300">聯絡我們</a>
+        </div>
     </header>
 
     <main>
+        <!-- 1. 首頁區塊 (Hero Section) -->
         <section id="home" class="bg-primary text-white py-16 md:py-24 lg:py-32">
-            <!-- (英雄區同原碼) -->
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight">
+                    專業快速的數位與家電維修服務
+                </h1>
+                <p class="text-xl sm:text-2xl mb-8 opacity-90">
+                    無論是您珍貴的手機，或是日常不可或缺的吹風機，我們提供原廠級別的專業維修。
+                </p>
+                <div class="space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#services" class="inline-block bg-white text-primary font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 transform hover:scale-105 transition duration-300">
+                        查看服務項目
+                    </a>
+                    <a href="#contact" class="inline-block border-2 border-white text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-white hover:text-primary transform hover:scale-105 transition duration-300">
+                        立即預約維修
+                    </a>
+                </div>
+            </div>
         </section>
 
+        <!-- 2. 服務項目 (Services) - 已採用您的優化樣式 -->
         <section id="services" class="py-16 md:py-24 bg-white">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 text-gray-800">我們的專業服務</h2>
-                <div class="grid md:grid-cols-2 gap-12">
-                    <!-- 吹風機維修卡片（加強漸層與陰影） -->
+
+                <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+                    <!-- 吹風機維修卡片 (優化樣式) -->
                     <div class="bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition duration-300 border-t-4 border-primary">
                         <div class="flex items-center mb-6">
-                            <i data-lucide="wind" class="w-12 h-12 text-primary mr-4"></i>
+                            <i data-lucide="wind" class="w-12 h-12 text-primary mr-4 flex-shrink-0"></i>
                             <h3 class="text-3xl font-bold text-gray-900">吹風機維修</h3>
                         </div>
                         <p class="text-gray-600 mb-6 text-lg">
@@ -89,10 +256,10 @@
                         </ul>
                     </div>
 
-                    <!-- 手機維修卡片（同樣加強） -->
+                    <!-- 手機維修卡片 (優化樣式) -->
                     <div class="bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition duration-300 border-t-4 border-primary">
                         <div class="flex items-center mb-6">
-                            <i data-lucide="smartphone" class="w-12 h-12 text-primary mr-4"></i>
+                            <i data-lucide="smartphone" class="w-12 h-12 text-primary mr-4 flex-shrink-0"></i>
                             <h3 class="text-3xl font-bold text-gray-900">手機維修</h3>
                         </div>
                         <p class="text-gray-600 mb-6 text-lg">
@@ -109,16 +276,153 @@
             </div>
         </section>
 
-        <!-- 其他區塊（四大優勢、維修流程、聯絡）同你的原碼，加強圖示大小 -->
+        <!-- 3. 為何選擇我們 (Why Choose Us) -->
+        <section id="why-us" class="py-16 md:py-24 bg-secondary">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 text-gray-800">選擇我們的四大優勢</h2>
 
-        <!-- 頁尾同原碼 -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- 優勢 1 -->
+                    <div class="bg-white p-6 rounded-xl shadow-md text-center transform hover:translate-y-[-5px] transition duration-300">
+                        <div class="icon-container w-12 h-12 mx-auto mb-4 bg-primary text-white rounded-full"><i data-lucide="tag" class="w-6 h-6"></i></div>
+                        <h4 class="text-xl font-semibold mb-2 text-gray-800">原廠零件保證</h4>
+                        <p class="text-gray-600 text-sm">所有替換零件均為原廠或經過嚴格認證，確保品質與耐用度。</p>
+                    </div>
+
+                    <!-- 優勢 2 -->
+                    <div class="bg-white p-6 rounded-xl shadow-md text-center transform hover:translate-y-[-5px] transition duration-300">
+                        <div class="icon-container w-12 h-12 mx-auto mb-4 bg-primary text-white rounded-full"><i data-lucide="user-check" class="w-6 h-6"></i></div>
+                        <h4 class="text-xl font-semibold mb-2 text-gray-800">認證技術人員</h4>
+                        <p class="text-gray-600 text-sm">我們的工程師皆經過專業培訓及官方認證，維修技術值得信賴。</p>
+                    </div>
+
+                    <!-- 優勢 3 -->
+                    <div class="bg-white p-6 rounded-xl shadow-md text-center transform hover:translate-y-[-5px] transition duration-300">
+                        <div class="icon-container w-12 h-12 mx-auto mb-4 bg-primary text-white rounded-full"><i data-lucide="clock" class="w-6 h-6"></i></div>
+                        <h4 class="text-xl font-semibold mb-2 text-gray-800">快速完修服務</h4>
+                        <p class="text-gray-600 text-sm">對於常見問題，我們提供快速檢測與當日維修服務，節省您的寶貴時間。</p>
+                    </div>
+
+                    <!-- 優勢 4 -->
+                    <div class="bg-white p-6 rounded-xl shadow-md text-center transform hover:translate-y-[-5px] transition duration-300">
+                        <div class="icon-container w-12 h-12 mx-auto mb-4 bg-primary text-white rounded-full"><i data-lucide="receipt" class="w-6 h-6"></i></div>
+                        <h4 class="text-xl font-semibold mb-2 text-gray-800">價格透明公開</h4>
+                        <p class="text-gray-600 text-sm">提供免費檢測及準確報價，經您確認後才開始維修，絕無隱藏費用。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 維修流程 (Repair Process) -->
+        <section id="process" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 text-gray-800">簡單四步，快速完修</h2>
+
+                <!-- 流程圖 (使用 Grid/Flex 實現響應式) -->
+                <div class="relative flex flex-col lg:flex-row justify-between items-center space-y-8 lg:space-y-0 lg:space-x-4">
+
+                    <!-- 虛線連接器 (僅在桌機版顯示) -->
+                    <div class="hidden lg:block absolute inset-x-0 top-1/2 h-1 bg-gray-200 z-0 transform -translate-y-1/2"></div>
+
+                    <!-- 步驟 1 -->
+                    <div class="process-step relative z-10 p-6 bg-primary text-white rounded-xl shadow-xl w-full lg:w-1/4 text-center">
+                        <div class="w-12 h-12 bg-white text-primary rounded-full flex items-center justify-center mx-auto mb-3 font-bold text-2xl border-4 border-primary-dark">1</div>
+                        <h4 class="text-xl font-semibold mb-2">線上預約/表單</h4>
+                        <p class="text-sm opacity-90">透過網站填寫維修需求與設備資訊。</p>
+                    </div>
+                    
+                    <!-- 步驟 2 -->
+                    <div class="process-step relative z-10 p-6 bg-white text-gray-800 rounded-xl shadow-xl w-full lg:w-1/4 text-center border-t-4 border-primary">
+                        <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold text-2xl border-4 border-white">2</div>
+                        <h4 class="text-xl font-semibold mb-2">送件/郵寄</h4>
+                        <p class="text-sm">親送至服務據點或使用宅配寄送設備。</p>
+                    </div>
+
+                    <!-- 步驟 3 -->
+                    <div class="process-step relative z-10 p-6 bg-white text-gray-800 rounded-xl shadow-xl w-full lg:w-1/4 text-center border-t-4 border-primary">
+                        <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold text-2xl border-4 border-white">3</div>
+                        <h4 class="text-xl font-semibold mb-2">專業檢測報價</h4>
+                        <p class="text-sm">技術人員檢測並電話/郵件提供準確報價。</p>
+                    </div>
+
+                    <!-- 步驟 4 -->
+                    <div class="process-step relative z-10 p-6 bg-primary text-white rounded-xl shadow-xl w-full lg:w-1/4 text-center">
+                        <div class="w-12 h-12 bg-white text-primary rounded-full flex items-center justify-center mx-auto mb-3 font-bold text-2xl border-4 border-primary-dark">4</div>
+                        <h4 class="text-xl font-semibold mb-2">完修取件</h4>
+                        <p class="text-sm opacity-90">確認付款後即可取回/寄回維修完成的設備。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 聯絡我們 (Contact Section) -->
+        <section id="contact" class="py-16 md:py-24 bg-gray-800 text-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12">立即聯絡我們</h2>
+
+                <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-10">
+                    <!-- 聯絡資訊 -->
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-primary">服務據點資訊</h3>
+                        <p class="flex items-start mb-4">
+                            <i data-lucide="map-pin" class="w-6 h-6 text-secondary mr-3 mt-1 flex-shrink-0"></i>
+                            <span class="text-lg">地址：台中市南區樹義五街162號  </span>
+                        </p>
+                        <p class="flex items-center mb-4">
+                            <i data-lucide="phone" class="w-6 h-6 text-secondary mr-3"></i>
+                            <span class="text-lg">電話：(04) 2263-1075</span>
+                        </p>
+                        <p class="flex items-center mb-4">
+                            <i data-lucide="mail" class="w-6 h-6 text-secondary mr-3"></i>
+                            <span class="text-lg">Email：kelly750127@gmail.com</span>
+                        </p>
+
+                        <div class="mt-8">
+                            <h4 class="text-xl font-semibold mb-3 text-primary">社群媒體</h4>
+                            <div class="flex space-x-4">
+                                <!-- 使用 Line Icon 作為社群媒體範例 -->
+                                <a href="#" class="w-10 h-10 bg-white text-gray-800 rounded-full flex items-center justify-center hover:bg-primary hover:text-white transition duration-300"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                                <a href="#" class="w-10 h-10 bg-white text-gray-800 rounded-full flex items-center justify-center hover:bg-primary hover:text-white transition duration-300"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                                <a href="#" class="w-10 h-10 bg-white text-gray-800 rounded-full flex items-center justify-center hover:bg-primary hover:text-white transition duration-300"><i data-lucide="message-square-text" class="w-5 h-5"></i></a> <!-- 替換 line-chart 為更接近 Line 的圖標 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 簡單聯絡表單 (已加入 Firestore 提交邏輯) -->
+                    <div class="bg-gray-700 p-6 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-semibold mb-4 text-white">快速留言</h3>
+                        <form id="contact-form" onsubmit="submitContactForm(event)">
+                            <div class="mb-4">
+                                <input type="text" placeholder="您的姓名" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white placeholder-gray-300 focus:ring-primary focus:border-primary" required>
+                            </div>
+                            <div class="mb-4">
+                                <input type="email" placeholder="您的電子郵件" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white placeholder-gray-300 focus:ring-primary focus:border-primary" required>
+                            </div>
+                            <div class="mb-4">
+                                <textarea rows="4" placeholder="請描述您的維修需求或問題..." class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white placeholder-gray-300 focus:ring-primary focus:border-primary" required></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 px-4 rounded-lg transition duration-300 shadow-md">
+                                送出留言
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <div id="notification-area" class="fixed bottom-4 right-4 z-50 space-y-2"></div>
+    <!-- 頁尾 -->
+    <footer class="bg-gray-900 text-white py-6">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 寶島維修中心. 版權所有.</p>
+            <p class="mt-2 text-gray-400">數位科技與家電維修專家。</p>
+        </div>
+    </footer>
 
-    <!-- 最後再初始化一次圖示 -->
-    <script>
-        initIcons();
-    </script>
+    <!-- Notification/Toast Area (固定在右下角，用於顯示提交回饋) -->
+    <div id="notification-area" class="fixed bottom-4 right-4 z-50 space-y-2">
+        <!-- Notifications will be injected here -->
+    </div>
+
 </body>
 </html>
