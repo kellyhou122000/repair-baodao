@@ -1,108 +1,167 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>寶島維修中心｜專業快速的數位與家電維修服務</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      lucide.createIcons();
-    });
-    function submitContactForm(e) {
-      e.preventDefault();
-      alert('已成功送出（示範頁，尚未串接後端）');
-      e.target.reset();
-    }
-  </script>
-  <style>
-    /* 讓滾動更平滑 */
-    html { scroll-behavior: smooth; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ⭐ SEO Title（完整豐富版） -->
+    <title>
+        寶島維修中心｜專業數位與家電維修・原廠零件・快速完修｜服務項目・維修流程・聯絡我們
+    </title>
+
+    <!-- ⭐ SEO Description -->
+    <meta name="description" content="寶島維修中心提供專業手機與家電維修服務，原廠零件、價格透明、快速完修。完整服務項目、維修流程說明，立即線上聯絡與預約。">
+
+    <!-- Open Graph（分享用） -->
+    <meta property="og:title" content="寶島維修中心｜專業數位與家電維修">
+    <meta property="og:description" content="手機、吹風機等家電專業維修，原廠零件、透明報價、快速流程。">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #333;
+        }
+        .icon-container {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0284c7',
+                        'primary-dark': '#0369a1',
+                        secondary: '#fef3c7',
+                    }
+                }
+            }
+        };
+
+        function toggleMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+    </script>
+
+    <!-- 🔥 Firebase（GitHub Pages 可用） -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        /* ⚠️ 請填入你自己的 Firebase 設定 */
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "XXXX",
+            appId: "XXXX"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        signInAnonymously(auth);
+
+        window.submitContactForm = async function (e) {
+            e.preventDefault();
+            const form = e.target;
+
+            const data = {
+                name: form.querySelector('input[type="text"]').value,
+                email: form.querySelector('input[type="email"]').value,
+                message: form.querySelector('textarea').value,
+                createdAt: new Date()
+            };
+
+            await addDoc(collection(db, "contact"), data);
+            alert("留言已送出，我們會盡快與您聯絡！");
+            form.reset();
+        };
+    </script>
 </head>
-<body class="bg-gray-50 text-gray-800">
 
-  <!-- Header -->
-  <header class="bg-white shadow-md sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold flex items-center gap-3">
-        <i data-lucide="wrench" class="w-8 h-8 text-sky-600"></i>
-        寶島維修中心
-      </h1>
-      <nav class="hidden md:flex space-x-8 text-lg">
-        <a href="#home" class="hover:text-sky-600 transition">首頁</a>
-        <a href="#services" class="hover:text-sky-600 transition">服務項目</a>
-        <a href="#contact" class="hover:text-sky-600 transition">快速留言</a>
-      </nav>
-    </div>
-  </header>
+<body class="bg-gray-50">
 
-  <!-- Hero Section -->
-  <section id="home" class="bg-gradient-to-br from-sky-500 to-sky-700 text-white py-32 text-center">
-    <div class="max-w-4xl mx-auto px-4">
-      <h2 class="text-5xl md:text-6xl font-bold mb-6">專業快速的維修服務</h2>
-      <p class="text-2xl mb-10">手機 ⋅ 筆電 ⋅ 平板 ⋅ 家電 ⋅ 吹風機 ⋅ 3C配件<br>一站式專業檢修與保養</p>
-      <a href="#contact" class="bg-white text-sky-600 font-bold px-8 py-4 rounded-full text-xl hover:bg-gray-100 transition inline-block">
-        立即預約維修
-      </a>
-    </div>
-  </section>
+<header class="sticky top-0 bg-white shadow z-50">
+    <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <a class="text-2xl font-bold text-primary flex items-center">
+            <i data-lucide="wrench" class="mr-2"></i>寶島維修中心
+        </a>
 
-  <!-- Services Section -->
-  <section id="services" class="py-20 bg-white">
-    <div class="max-w-6xl mx-auto px-4">
-      <h3 class="text-4xl font-bold text-center mb-12">服務項目</h3>
-      <div class="grid md:grid-cols-3 gap-10">
-        <div class="text-center p-8 bg-gray-50 rounded-xl shadow hover:shadow-lg transition">
-          <i data-lucide="smartphone" class="w-16 h-16 mx-auto mb-4 text-sky-600"></i>
-          <h4 class="text-2xl font-semibold mb-3">手機維修</h4>
-          <p class="text-gray-600">螢幕破裂、電池老化、主板故障、進水處理</p>
+        <div class="hidden md:flex space-x-6">
+            <a href="#home">首頁</a>
+            <a href="#services">服務項目</a>
+            <a href="#why-us">我們的優勢</a>
+            <a href="#process">維修流程</a>
+            <a href="#contact">聯絡我們</a>
         </div>
-        <div class="text-center p-8 bg-gray-50 rounded-xl shadow hover:shadow-lg transition">
-          <i data-lucide="laptop" class="w-16 h-16 mx-auto mb-4 text-sky-600"></i>
-          <h4 class="text-2xl font-semibold mb-3">筆電 / 平板</h4>
-          <p class="text-gray-600">開機不亮、鍵盤故障、系統重裝、硬碟升級</p>
-        </div>
-        <div class="text-center p-8 bg-gray-50 rounded-xl shadow hover:shadow-lg transition">
-          <i data-lucide="home" class="w-16 h-16 mx-auto mb-4 text-sky-600"></i>
-          <h4 class="text-2xl font-semibold mb-3">家電維修</h4>
-          <p class="text-gray-600">吹風機、電扇、咖啡機、小家電保養與維修</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Contact Form Section -->
-  <section id="contact" class="py-20 bg-gray-100">
-    <div class="max-w-4xl mx-auto px-4">
-      <h3 class="text-4xl font-bold text-center mb-12">快速留言 ⋅ 免費報價</h3>
-      <form onsubmit="submitContactForm(event)" class="grid md:grid-cols-2 gap-6 bg-white p-10 rounded-2xl shadow-xl">
-        <input required type="text" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="您的姓名">
-        <input required type="tel" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="手機號碼">
-        <input required type="email" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="Email（選填）">
-        <input type="text" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="設備品牌與型號（選填）">
-        <textarea required rows="6" class="w-full md:col-span-2 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="請描述故障現象或維修需求"></textarea>
-        <button type="submit" class="md:col-span-2 bg-sky-600 text-white font-bold px-8 py-4 rounded-lg hover:bg-sky-700 transition text-xl">
-          立即送出 ⋅ 免費估價
+        <button class="md:hidden" onclick="toggleMenu()">
+            <i data-lucide="menu"></i>
         </button>
-      </form>
-    </div>
-  </section>
+    </nav>
 
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-white py-10 text-center">
-    <div class="max-w-6xl mx-auto px-4">
-      <p class="text-2xl font-bold mb-4 flex items-center justify-center gap-3">
-        <i data-lucide="wrench"></i> 寶島維修中心
-      </p>
-      <p class="mb-2">營業時間：週一至週六 10:00 - 19:00（國定假日休）</p>
-      <p class="mb-4">電話：(02) 1234-5678 │ Line ID：@baodao.repair</p>
-      <p>&copy; 2025 寶島維修中心 All Rights Reserved.</p>
+    <div id="mobile-menu" class="hidden bg-white px-4 pb-4 md:hidden">
+        <a href="#home" class="block py-2">首頁</a>
+        <a href="#services" class="block py-2">服務項目</a>
+        <a href="#why-us" class="block py-2">我們的優勢</a>
+        <a href="#process" class="block py-2">維修流程</a>
+        <a href="#contact" class="block py-2">聯絡我們</a>
     </div>
-  </footer>
+</header>
+
+<!-- Hero -->
+<section id="home" class="bg-primary text-white text-center py-24">
+    <h1 class="text-5xl font-extrabold mb-4">專業快速的數位與家電維修服務</h1>
+    <p class="text-xl mb-8">原廠零件・透明報價・快速流程</p>
+    <a href="#contact" class="bg-white text-primary px-8 py-3 rounded-full font-bold">立即預約</a>
+</section>
+
+<!-- Services -->
+<section id="services" class="py-20 container mx-auto px-4">
+    <h2 class="text-4xl font-bold text-center mb-12">服務項目</h2>
+    <div class="grid md:grid-cols-2 gap-8">
+        <div class="p-6 bg-gray-100 rounded-xl shadow">手機維修</div>
+        <div class="p-6 bg-gray-100 rounded-xl shadow">吹風機維修</div>
+    </div>
+</section>
+
+<!-- Contact -->
+<section id="contact" class="bg-gray-800 text-white py-20">
+    <div class="max-w-xl mx-auto">
+        <h2 class="text-3xl font-bold mb-6 text-center">聯絡我們</h2>
+        <form onsubmit="submitContactForm(event)" class="space-y-4">
+            <input required placeholder="姓名" class="w-full p-3 rounded bg-gray-700">
+            <input required type="email" placeholder="Email" class="w-full p-3 rounded bg-gray-700">
+            <textarea required placeholder="維修需求" class="w-full p-3 rounded bg-gray-700"></textarea>
+            <button class="w-full bg-primary py-3 rounded font-bold">送出</button>
+        </form>
+    </div>
+</section>
+
+<footer class="bg-gray-900 text-white text-center py-6">
+    © 2025 寶島維修中心
+</footer>
 
 </body>
 </html>
