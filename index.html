@@ -1,58 +1,166 @@
-<!-- 服務項目 -->
-<section id="services" class="py-20 bg-white">
-  <div class="max-w-6xl mx-auto px-4">
-    <h2 class="text-4xl font-bold text-center mb-12">服務項目</h2>
-    <div class="grid md:grid-cols-3 gap-10">  <!-- 改成 3 欄 -->
-      <!-- 手機維修 -->
-      <div class="p-8 bg-gray-50 rounded-2xl shadow hover:shadow-lg transition">
-        <div class="flex items-center mb-4">
-          <i data-lucide="smartphone" class="w-10 h-10 text-sky-600 mr-4"></i>
-          <h3 class="text-2xl font-semibold">手機維修</h3>
-        </div>
-        <p class="text-gray-600 mb-4">
-          提供主流品牌手機專業維修，從外觀到主機板皆可處理。
-        </p>
-        <ul class="space-y-2 text-gray-700">
-          <li>✔ 螢幕破裂 / 背蓋更換</li>
-          <li>✔ 電池老化更換</li>
-          <li>✔ 充電孔、喇叭故障</li>
-          <li>✔ 進水機緊急處理</li>
-        </ul>
-      </div>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>寶島維修中心｜專業快速的數位與家電維修服務</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+    function submitContactForm(e) {
+      e.preventDefault();
+      alert('已成功送出（示範頁，尚未串接後端）');
+      e.target.reset();
+    }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-800">
 
-      <!-- 筆電 / 平板（新增回來） -->
-      <div class="p-8 bg-gray-50 rounded-2xl shadow hover:shadow-lg transition">
-        <div class="flex items-center mb-4">
-          <i data-lucide="laptop" class="w-10 h-10 text-sky-600 mr-4"></i>
-          <h3 class="text-2xl font-semibold">筆電 / 平板</h3>
-        </div>
-        <p class="text-gray-600 mb-4">
-          專業處理筆電與平板電腦常見問題，快速恢復正常使用。
-        </p>
-        <ul class="space-y-2 text-gray-700">
-          <li>✔ 開機不亮 / 藍屏</li>
-          <li>✔ 鍵盤、觸控板故障</li>
-          <li>✔ 系統重裝與優化</li>
-          <li>✔ 硬碟 / 記憶體升級</li>
-        </ul>
-      </div>
+  <!-- Header -->
+  <header class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold flex items-center gap-3">
+        <i data-lucide="wrench" class="w-8 h-8 text-sky-600"></i>
+        寶島維修中心
+      </h1>
+      <nav class="hidden md:flex space-x-8 text-lg">
+        <a href="#" class="hover:text-sky-600 transition">首頁</a>
+        <a href="#services" class="hover:text-sky-600 transition">服務項目</a>
+        <a href="#advantages" class="hover:text-sky-600 transition">我們的優勢</a>
+        <a href="#contact" class="hover:text-sky-600 transition">維修流程</a>
+        <a href="#contact" class="hover:text-sky-600 transition">聯絡我們</a>
+      </nav>
+    </div>
+  </header>
 
-      <!-- 吹風機維修 -->
-      <div class="p-8 bg-gray-50 rounded-2xl shadow hover:shadow-lg transition">
-        <div class="flex items-center mb-4">
-          <i data-lucide="wind" class="w-10 h-10 text-sky-600 mr-4"></i>
-          <h3 class="text-2xl font-semibold">吹風機維修</h3>
-        </div>
-        <p class="text-gray-600 mb-4">
-          專修高階與專業吹風機，恢復原有風力與穩定性。
-        </p>
-        <ul class="space-y-2 text-gray-700">
-          <li>✔ 無法啟動 / 斷電</li>
-          <li>✔ 風力變弱、過熱</li>
-          <li>✔ 馬達與發熱元件更換</li>
-          <li>✔ 內部清潔與保養</li>
-        </ul>
+  <!-- Hero Section (圖二大藍色區) -->
+  <section class="bg-blue-600 text-white py-24 text-center">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">
+        專業快速的數位與家電維修服務
+      </h2>
+      <p class="text-xl mb-10">
+        無論是您珍貴的手機，或是日常不可或缺的吹風機，我們提供原廠級別的專業維修。
+      </p>
+      <div class="flex flex-col sm:flex-row gap-6 justify-center">
+        <a href="#services" class="bg-white text-blue-600 font-bold px-8 py-4 rounded-full hover:bg-gray-100 transition">
+          查看服務項目
+        </a>
+        <a href="#contact" class="border-2 border-white font-bold px-8 py-4 rounded-full hover:bg-white hover:text-blue-600 transition">
+          立即預約維修
+        </a>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- 我們的專業服務 (圖二中間兩個卡片) -->
+  <section id="services" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-4xl font-bold text-center mb-16">我們的專業服務</h2>
+      <div class="grid md:grid-cols-2 gap-12">
+        <!-- 吹風機維修 -->
+        <div class="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl shadow-lg border border-blue-100">
+          <div class="flex items-center mb-6">
+            <i data-lucide="wind" class="w-12 h-12 text-blue-600 mr-4"></i>
+            <h3 class="text-2xl font-bold">吹風機維修</h3>
+          </div>
+          <p class="text-gray-700 mb-6">
+            我們專精各種品牌高階吹風機維修，無論是馬達異音、發熱異常、斷電或風力變弱，我們都有專業解方，讓您的愛機恢復最佳狀態。
+          </p>
+          <ul class="space-y-3 text-gray-700">
+            <li class="flex items-center"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-2"></i> 馬達維修更換</li>
+            <li class="flex items-center"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-2"></i> 加熱元件更換</li>
+            <li class="flex items-center"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-2"></i> 線路及按鍵修復</li>
+            <li class="flex items-center"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-2"></i> 內部清潔保養</li>
+          </ul>
+        </div>
+
+        <!-- 手機維修 -->
+        <div class="bg-gradient-to-br from-sky-50 to-white p-8 rounded-2xl shadow-lg border border-sky-100">
+          <div class="flex items-center mb-6">
+            <i data-lucide="smartphone" class="w-12 h-12 text-sky-600 mr-4"></i>
+            <h3 class="text-2xl font-bold">手機維修</h3>
+          </div>
+          <p class="text-gray-700 mb-6">
+            提供主流品牌手機專業維修，從螢幕更換、電池老化、主機板故障到進水處理，我們都能快速精準處理，讓您的手機重現新生。
+          </p>
+          <ul class="space-y-3 text-gray-700">
+            <li class="flex items-center"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-2"></i> 螢幕 / 背蓋更換</li>
+            <li class="flex items-center"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-2"></i> 電池更換及續航力優化</li>
+            <li class="flex items-center"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-2"></i> 鏡頭 / 按鍵 / 喇叭排除</li>
+            <li class="flex items-center"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-2"></i> 進水緊急處理</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 選擇我們的四大優勢 (圖二下方淺黃區塊) -->
+  <section id="advantages" class="py-20 bg-amber-50">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h2 class="text-4xl font-bold mb-16">選擇我們的四大優勢</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
+        <div class="flex flex-col items-center">
+          <div class="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mb-4">
+            <i data-lucide="tool" class="w-10 h-10"></i>
+          </div>
+          <p class="font-semibold">原廠零件保證</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mb-4">
+            <i data-lucide="users" class="w-10 h-10"></i>
+          </div>
+          <p class="font-semibold">資深技術人員</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mb-4">
+            <i data-lucide="clock" class="w-10 h-10"></i>
+          </div>
+          <p class="font-semibold">快速完修服務</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="bg-blue-600 text-white w-20 h-20 rounded-full flex items-center justify-center mb-4">
+            <i data-lucide="shield" class="w-10 h-10"></i>
+          </div>
+          <p class="font-semibold">維修保固公開</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 聯絡表單（保留你原本的） -->
+  <section id="contact" class="py-20 bg-gray-100">
+    <div class="max-w-4xl mx-auto px-4">
+      <h3 class="text-4xl font-bold text-center mb-12">快速留言 ⋅ 免費報價</h3>
+      <form onsubmit="submitContactForm(event)" class="grid md:grid-cols-2 gap-6 bg-white p-10 rounded-2xl shadow-xl">
+        <input required type="text" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="您的姓名">
+        <input required type="tel" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="手機號碼">
+        <input required type="email" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-blue-500" placeholder="Email（選填）">
+        <input type="text" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-blue-500" placeholder="設備品牌與型號（選填）">
+        <textarea required rows="6" class="w-full md:col-span-2 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="請描述故障現象或維修需求"></textarea>
+        <button type="submit" class="md:col-span-2 bg-blue-600 text-white font-bold px-8 py-4 rounded-lg hover:bg-blue-700 transition text-xl">
+          立即送出 ⋅ 免費估價
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-10 text-center">
+    <div class="max-w-6xl mx-auto px-4">
+      <p class="text-2xl font-bold mb-4 flex items-center justify-center gap-3">
+        <i data-lucide="wrench"></i> 寶島維修中心
+      </p>
+      <p class="mb-2">營業時間：週一至週五 10:00 - 19:00（國定假日休）</p>
+      <p class="mb-4">電話：(04) 2263-1075 │ Line ID：kelly122000 </p>
+      <p>&copy; 2025 寶島維修中心 All Rights Reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
