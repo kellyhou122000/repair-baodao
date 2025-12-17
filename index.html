@@ -1,167 +1,44 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- ⭐ SEO Title（完整豐富版） -->
-    <title>
-        寶島維修中心｜專業數位與家電維修・原廠零件・快速完修｜服務項目・維修流程・聯絡我們
-    </title>
-
-    <!-- ⭐ SEO Description -->
-    <meta name="description" content="寶島維修中心提供專業手機與家電維修服務，原廠零件、價格透明、快速完修。完整服務項目、維修流程說明，立即線上聯絡與預約。">
-
-    <!-- Open Graph（分享用） -->
-    <meta property="og:title" content="寶島維修中心｜專業數位與家電維修">
-    <meta property="og:description" content="手機、吹風機等家電專業維修，原廠零件、透明報價、快速流程。">
-    <meta property="og:type" content="website">
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            color: #333;
-        }
-        .icon-container {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#0284c7',
-                        'primary-dark': '#0369a1',
-                        secondary: '#fef3c7',
-                    }
-                }
-            }
-        };
-
-        function toggleMenu() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-        });
-    </script>
-
-    <!-- 🔥 Firebase（GitHub Pages 可用） -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        /* ⚠️ 請填入你自己的 Firebase 設定 */
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "XXXX",
-            appId: "XXXX"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        signInAnonymously(auth);
-
-        window.submitContactForm = async function (e) {
-            e.preventDefault();
-            const form = e.target;
-
-            const data = {
-                name: form.querySelector('input[type="text"]').value,
-                email: form.querySelector('input[type="email"]').value,
-                message: form.querySelector('textarea').value,
-                createdAt: new Date()
-            };
-
-            await addDoc(collection(db, "contact"), data);
-            alert("留言已送出，我們會盡快與您聯絡！");
-            form.reset();
-        };
-    </script>
-</head>
-
-<body class="bg-gray-50">
-
-<header class="sticky top-0 bg-white shadow z-50">
-    <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
-        <a class="text-2xl font-bold text-primary flex items-center">
-            <i data-lucide="wrench" class="mr-2"></i>寶島維修中心
-        </a>
-
-        <div class="hidden md:flex space-x-6">
-            <a href="#home">首頁</a>
-            <a href="#services">服務項目</a>
-            <a href="#why-us">我們的優勢</a>
-            <a href="#process">維修流程</a>
-            <a href="#contact">聯絡我們</a>
-        </div>
-
-        <button class="md:hidden" onclick="toggleMenu()">
-            <i data-lucide="menu"></i>
-        </button>
-    </nav>
-
-    <div id="mobile-menu" class="hidden bg-white px-4 pb-4 md:hidden">
-        <a href="#home" class="block py-2">首頁</a>
-        <a href="#services" class="block py-2">服務項目</a>
-        <a href="#why-us" class="block py-2">我們的優勢</a>
-        <a href="#process" class="block py-2">維修流程</a>
-        <a href="#contact" class="block py-2">聯絡我們</a>
-    </div>
-</header>
-
-<!-- Hero -->
-<section id="home" class="bg-primary text-white text-center py-24">
-    <h1 class="text-5xl font-extrabold mb-4">專業快速的數位與家電維修服務</h1>
-    <p class="text-xl mb-8">原廠零件・透明報價・快速流程</p>
-    <a href="#contact" class="bg-white text-primary px-8 py-3 rounded-full font-bold">立即預約</a>
-</section>
-
-<!-- Services -->
-<section id="services" class="py-20 container mx-auto px-4">
+<!-- 服務項目 -->
+<section id="services" class="py-20 bg-white">
+  <div class="max-w-6xl mx-auto px-4">
     <h2 class="text-4xl font-bold text-center mb-12">服務項目</h2>
-    <div class="grid md:grid-cols-2 gap-8">
-        <div class="p-6 bg-gray-100 rounded-xl shadow">手機維修</div>
-        <div class="p-6 bg-gray-100 rounded-xl shadow">吹風機維修</div>
+
+    <div class="grid md:grid-cols-2 gap-10">
+
+      <!-- 手機維修 -->
+      <div class="p-8 bg-gray-50 rounded-2xl shadow hover:shadow-lg transition">
+        <div class="flex items-center mb-4">
+          <i data-lucide="smartphone" class="w-10 h-10 text-sky-600 mr-4"></i>
+          <h3 class="text-2xl font-semibold">手機維修</h3>
+        </div>
+        <p class="text-gray-600 mb-4">
+          提供主流品牌手機專業維修，從外觀到主機板皆可處理。
+        </p>
+        <ul class="space-y-2 text-gray-700">
+          <li>✔ 螢幕破裂 / 背蓋更換</li>
+          <li>✔ 電池老化更換</li>
+          <li>✔ 充電孔、喇叭故障</li>
+          <li>✔ 進水機緊急處理</li>
+        </ul>
+      </div>
+
+      <!-- 吹風機維修 -->
+      <div class="p-8 bg-gray-50 rounded-2xl shadow hover:shadow-lg transition">
+        <div class="flex items-center mb-4">
+          <i data-lucide="wind" class="w-10 h-10 text-sky-600 mr-4"></i>
+          <h3 class="text-2xl font-semibold">吹風機維修</h3>
+        </div>
+        <p class="text-gray-600 mb-4">
+          專修高階與專業吹風機，恢復原有風力與穩定性。
+        </p>
+        <ul class="space-y-2 text-gray-700">
+          <li>✔ 無法啟動 / 斷電</li>
+          <li>✔ 風力變弱、過熱</li>
+          <li>✔ 馬達與發熱元件更換</li>
+          <li>✔ 內部清潔與保養</li>
+        </ul>
+      </div>
+
     </div>
+  </div>
 </section>
-
-<!-- Contact -->
-<section id="contact" class="bg-gray-800 text-white py-20">
-    <div class="max-w-xl mx-auto">
-        <h2 class="text-3xl font-bold mb-6 text-center">聯絡我們</h2>
-        <form onsubmit="submitContactForm(event)" class="space-y-4">
-            <input required placeholder="姓名" class="w-full p-3 rounded bg-gray-700">
-            <input required type="email" placeholder="Email" class="w-full p-3 rounded bg-gray-700">
-            <textarea required placeholder="維修需求" class="w-full p-3 rounded bg-gray-700"></textarea>
-            <button class="w-full bg-primary py-3 rounded font-bold">送出</button>
-        </form>
-    </div>
-</section>
-
-<footer class="bg-gray-900 text-white text-center py-6">
-    © 2025 寶島維修中心
-</footer>
-
-</body>
-</html>
